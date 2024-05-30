@@ -1,19 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
-
 #include"cabecalho.h"
 
-typedef struct{
-    int codigo;
-    char genero;
-    char modalidade[51];
-    char cidade[51];
-    int ano;
-    char tipo;
-    char nome[51];
-    char pais[51];
-    //void resultado;
-} Medalha;
+#include<stdlib.h>
 
 int main(){
     FILE *arquivo = fopen("medalhas.csv","r");
@@ -21,15 +8,19 @@ int main(){
         perror("Erro ao abrir o arquivo ");
         exit(1);
     }
-
-    Medalha *medalhas;
-
-    medalhas = (struct Medalha *)malloc(sizeof(struct Medalha));
-
-
     
+    Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * 2394);
+    if(medalhas == NULL){
+        perror("Erro ao alocar memoria dinamica ");
+        exit(1);
+    }
+    printf("Bem-vindo!");
 
+    lerArquivo(medalhas, arquivo);
 
+    verificarTamanhoArq();
+
+    free(medalhas);
     fclose(arquivo);
     return 0;
 }
