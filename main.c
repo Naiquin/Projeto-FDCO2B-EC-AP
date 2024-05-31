@@ -8,17 +8,16 @@ int main(){
         perror("Erro ao abrir o arquivo ");
         exit(1);
     }
+    int tamanho = verificarTamanhoArq(arquivo);
     
-    Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * 2394);
+    Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * tamanho);
     if(medalhas == NULL){
         perror("Erro ao alocar memoria dinamica ");
         exit(1);
     }
     printf("Bem-vindo!");
 
-    lerArquivo(medalhas, arquivo);
-
-    verificarTamanhoArq();
+    lerArquivo(medalhas, arquivo, tamanho);
 
     free(medalhas);
     fclose(arquivo);
