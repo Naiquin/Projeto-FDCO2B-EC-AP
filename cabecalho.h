@@ -15,8 +15,9 @@ typedef struct{
     char resultado[11];
 } Medalha;
 
-void lerArquivo(Medalha medalhas[], FILE *arquivo, int tamanho);
-
+void lerArquivo(Medalha medalhas[], FILE *arquivo);
 int verificarTamanhoArq(FILE *arquivo);
+
+void menuInicial(Medalha medalhas[], int *tamanho);
 
 #endif // CABECALHO_H
