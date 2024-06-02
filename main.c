@@ -12,18 +12,17 @@ int main(){
         exit(1);
     }
     int tamanho = verificarTamanhoArq(arquivo1);
-    
-    Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * 5);
-
+    Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * tamanho);
     if(medalhas == NULL){
         perror("Erro ao alocar memoria dinamica ");
         exit(1);
     }
+    
     printf(BOLD "Bem-vindo!" RESET);
 
-    lerArquivo(medalhas, arquivo1);
+    lerArquivo( medalhas, arquivo1, tamanho);
 
-    menuInicial(medalhas, &tamanho);
+    //menuInicial(medalhas, &tamanho);
 
     fclose(arquivo1);
 
@@ -33,15 +32,7 @@ int main(){
         exit(1);
     }
 
-    for(int i=0; i<5; i++){
-        printf("\n%d,%c,%s,%s,%d,%c,%s,%s,%s\n", medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade, medalhas[i].cidade, 
-                                medalhas[i].ano, medalhas[i].tipo, medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-    }
-
-    for(int i=0; i<5; i++){
-        fprintf( arquivo2,"%d,%c,%s,%s,%d,%c,%s,%s,%s\n", medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade, medalhas[i].cidade, 
-                                medalhas[i].ano, medalhas[i].tipo, medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-    }
+    escreverArquivo( medalhas, arquivo2, tamanho);
 
     fclose(arquivo2);
     free(medalhas);

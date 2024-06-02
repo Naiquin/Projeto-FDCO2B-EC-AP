@@ -15,6 +15,7 @@ void lerString(char string[], int tamanho){
 }
 
 void inserir(Medalha medalhas[], int *tamanho);
+void listar(Medalha medalhas[], int *tamanho);
 
 void menuInicial(Medalha medalhas[], int *tamanho){
     char opcao[10];
@@ -28,7 +29,7 @@ void menuInicial(Medalha medalhas[], int *tamanho){
     if(strcasecmp(opcao, "1") == 0 || strcasecmp(opcao, "inserir") == 0){
         inserir(medalhas, tamanho);
     }else if(strcasecmp(opcao, "2") == 0 || strcasecmp(opcao, "listar") == 0){
-
+        listar(medalhas, tamanho);
     }else if(strcasecmp(opcao, "3") == 0 || strcasecmp(opcao, "pesquisar") == 0){
         
     }else if(strcasecmp(opcao, "4") == 0 || strcasecmp(opcao, "alterar") == 0){
@@ -73,15 +74,14 @@ void inserir(Medalha medalhas[], int *tamanho){
     return;
 }
 
-
-void listar(Medalha medalhas[], int tamanho){
-
-    printf(BOLD "CODIGO\t|GENERO\t|MODALIDADE\t|CIDADE\t|ANO\t|TIPO\t|NOME\t|PAIS\t|RESULTADO" RESET);
-    for(int i=0; i<5; i++){
-        printf("%d\t|%c\t|%s\t|%s\t|%d\t|%c\t|%s\t|%s\t|%s", medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade, medalhas[i].cidade, 
-                                medalhas[i].ano, &medalhas[i].tipo, medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
+void listar(Medalha medalhas[], int *tamanho){
+    printf(BOLD "CODIGO\t|GENERO\t|MODALIDADE\t|CIDADE\t|ANO\t|TIPO\t|NOME\t|PAIS\t|RESULTADO\n" RESET);
+    for(int i=0; i<(*tamanho); i++){
+        printf("%d\t|%c\t|%s\t|%s\t|%d\t|%c\t|%s\t|%s\t|%s",
+                            medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
+                            medalhas[i].cidade, medalhas[i].ano, &medalhas[i].tipo,
+                            medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
     }
-
     return;
 }
 
