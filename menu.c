@@ -8,7 +8,7 @@
 
 void lerString(char string[], int tamanho){
     setbuf(stdin,NULL);
-    fgets(string, 10, stdin);
+    fgets(string, tamanho, stdin);
     string[strcspn(string,"\n")]='\0';
     setbuf(stdin,NULL);
     return;
@@ -19,10 +19,7 @@ void listar(Medalha medalhas[], int *tamanho);
 
 void menuInicial(Medalha medalhas[], int *tamanho){
     char opcao[10];
-
-    printf(BOLD "\n------MENU INICIAL-----\n\n" RESET);
-
-    printf(BOLD "Lista de opções\n" RESET);
+    printf(BOLD "\n------MENU INICIAL-----\n\nLista de opções\n" RESET);
     printf("1- Inserir\n2- Listar\n3- Pesquisar\n4- Alterar\n5- Excluir\n6- Sair\n");
     lerString(opcao, 10);
 
@@ -40,7 +37,6 @@ void menuInicial(Medalha medalhas[], int *tamanho){
         
     }
 
-
     return;
 }
 
@@ -56,21 +52,20 @@ void inserir(Medalha medalhas[], int *tamanho){
     printf("Informe o genero do atleta: ");
     scanf("%c", &medalhas[(*tamanho)].genero);
     printf("Informe a modalidade que foi conquistada a medalha: ");
-    scanf("%s", medalhas[(*tamanho)].modalidade);
+    lerString( medalhas[(*tamanho)].modalidade, 50);
     printf("Informe a cidade que foi conquistada a medalha: ");
-    scanf("%s", medalhas[(*tamanho)].cidade);
+    lerString( medalhas[(*tamanho)].cidade, 50);
     printf("Informe o ano que foi conquistada a medalha: ");
     scanf("%d", medalhas[(*tamanho)].ano);
     printf("Informe o tipo GBD da medalha: ");
     scanf("%c", medalhas[(*tamanho)].tipo);
     printf("Informe o nome do atleta: ");
-    scanf("%s", medalhas[(*tamanho)].nome);
+    lerString( medalhas[(*tamanho)].nome, 50);
     printf("Informe o pais onde o atleta nasceu: ");
-    scanf("%s", medalhas[(*tamanho)].pais);
+    lerString( medalhas[(*tamanho)].pais, 50);
     printf("Informe o resultado do atleta: ");
-    scanf("%s", medalhas[(*tamanho)].resultado);
+    lerString( medalhas[(*tamanho)].resultado, 50);
     
-
     return;
 }
 
