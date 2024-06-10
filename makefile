@@ -1,3 +1,6 @@
+#Comandos
+#mingw32-make para windows (mingw32-make run p/ rodar)
+#make no linux
 main: main.o
 	@echo "Gerando arquivo executável"
 	gcc *.o -o main

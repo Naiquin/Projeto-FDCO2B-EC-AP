@@ -1,6 +1,0 @@
-
-//Impressão 
-for(int i=0; i<5; i++){
-    printf("\n%d,%c,%s,%s,%d,%c,%s,%s,%s\n", medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade, medalhas[i].cidade, 
-                            medalhas[i].ano, medalhas[i].tipo, medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-}

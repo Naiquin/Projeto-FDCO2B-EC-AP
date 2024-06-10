@@ -22,7 +22,7 @@ int main(){
 
     lerArquivo( medalhas, arquivo1, tamanho);
 
-    //menuInicial(medalhas, &tamanho);
+    menuInicial(medalhas, &tamanho);
 
     fclose(arquivo1);
 
