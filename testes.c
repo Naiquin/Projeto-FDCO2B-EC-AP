@@ -21,17 +21,25 @@ typedef struct{
     char resultado[11];
 } Medalha;
 
+// Função que lé as informacoes do arquivo
 void lerArquivo(Medalha medalhas[], FILE *arquivo, int tamanho) {
+
+    // for responsavel por passar por todas as linhas do codigo
     for(int i=0; i<tamanho; i++){
+
+        // salva o codigo de acordo com a linha em que ela se encontra no arquivo
         medalhas[i].codigo = i;
+
+        // Salva as informacoes de cada linha na struct separando as informacoes pelas linhas
         fscanf(arquivo, " %c,%50[^,],%50[^,],%d,%c,%50[^,],%50[^,],%10[^\n]",
                             &medalhas[i].genero, medalhas[i].modalidade, medalhas[i].cidade,
                             &medalhas[i].ano, &medalhas[i].tipo, medalhas[i].nome,
                             medalhas[i].pais, medalhas[i].resultado);
-    }
+    }// for
     return;
-}
+}// lerArquivo
 
+// Função que escreve no arquivo
 void escreverArquivo(Medalha medalhas[], FILE *arquivo, int tamanho){
     for(int i=0; i<tamanho; i++){
         fprintf( arquivo,"%d,%c,%s,%s,%d,%c,%s,%s,%s\n",
@@ -46,9 +54,8 @@ void lerBinario(Medalha medalhas[],FILE* arquivo, int *tamanho){
 
 
 
-    fread(tamanho,sizeof(Medalha), 1 ,arquivo);
-    medalhas = malloc(sizeof(Medalha)* (*tamanho));
-    fclose(arquivo);
+    fread(medalhas,sizeof(Medalha),(*tamanho),arquivo);
+    
 
 
     // for (int i = 0; i < (* tamanho); i++)
@@ -69,35 +76,23 @@ void lerBinario(Medalha medalhas[],FILE* arquivo, int *tamanho){
     
 }
 
-void salvaBinario(Medalha medalhas[],FILE* arquivo, int *tamanho){
- char virgula = ',';
-        for (int i = 0; i < (* tamanho); i++)
-        {
+void salvaBinario(Medalha medalhas[],int *tamanho){
 
-            // fprintf(arquivo,"%d,%c,%s,%s,%d,%c,%s,%s,%s\n",
-            //                     medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
-            //                     medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
-            //                     medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-            
-            fwrite(&medalhas->codigo,sizeof(int),1,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->genero,sizeof(char),1,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->modalidade,sizeof(char),51,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->cidade,sizeof(char),51,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->ano,sizeof(int),1,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->tipo,sizeof(char),1,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->nome,sizeof(char),51,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->pais,sizeof(char),51,arquivo);
-            fwrite(&virgula,sizeof(char),1,arquivo);
-            fwrite(&medalhas->pais,sizeof(char),11,arquivo);
-        }
+    FILE * arquivo=fopen("medalhas.txt","wb");
+
+    if (arquivo == NULL)
+    {
+        printf("Erro ao salvar arquivo...\narquivo não salvo\n\n");
+        exit(1);
+
+    }
+    
+
+ 
+            fwrite(&medalhas,sizeof(Medalha),tamanho,arquivo);
+        
             printf("\n Arquivos salvos..\n");
+            fclose(arquivo);
         
 
 return;
@@ -105,42 +100,56 @@ return;
 
 }// salva binario
 
+//salva as informações em formato csv com o nome dado pelo usuario
 void salvarCSV(Medalha medalhas[], char *nomeArquivo,int *tamanho){
 
+    
     char csv[4] = ".csv";
-    nomeArquivo = strcat(nomeArquivo,csv);
-    FILE *arquivo = fopen(nomeArquivo,"w");
+    nomeArquivo = strcat(nomeArquivo,csv);// acrecenta o .csv no nome do arquivo
+    FILE *arquivo = fopen(nomeArquivo,"w");// Cria o arquivo .csv no moto texto escrita
+
+    //ir que verifica erro na criação de arquivo
     if (arquivo == NULL)
     {
+        // mensagem de erro
         printf("\nErro ao salvar o arquive em .csv\n\n");
         printf("Fim do programa, arquivo não salvo...\n");
-        exit(1);
-    }
+        exit(1);// fim do programa
+    }//if
     
+    // for responsavel por salvar as informações no arquivo .csv 
     for (int i = 0; i < (*tamanho); i++)
     {
+        // salva cada linha
         fprintf( arquivo,"%d,%c,%s,%s,%d,%c,%s,%s,%s\n",
                             medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
                             medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
                             medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-    }
+    }//for
     
 printf("\n Arquivos salvos..\n");
 
-}
+}//// salvarCSV
 
+// verifica quantas linhas tem o arquivo
 int verificarTamanhoArq(FILE *arquivo){
+    // variaveis usadas
     char caractere;
     int contador = 1;
-    while ((caractere = fgetc(arquivo)) != EOF) {
-        if(caractere == '\n'){
-            contador++;
-        }
-    }
-    fseek(arquivo, SEEK_SET, 0);
-    return contador;
-}
 
+    // while que para quando chega no fim do arquivo
+    while ((caractere = fgetc(arquivo)) != EOF) {
+
+        // if que verifica toda vez que aparece um \n
+        if(caractere == '\n'){
+            contador++;// acrecebta 1 no contador
+        }//if
+    }//while
+    fseek(arquivo, SEEK_SET, 0);// -------não sei pq ta aqui---------
+    return contador;// retorna o valor do contador
+}// verificaTamanhoArq
+
+//--------ver se ta funcionando ou nao---------
 void lerString(char string[], int tamanho){
 
     setbuf(stdin,NULL);
@@ -154,7 +163,7 @@ void lerString(char string[], int tamanho){
     return;
 }
 
-
+// -------- verificar e melhorar----------
 void inserir(Medalha medalhas[],int *tamanho){
     ((*tamanho)++);
     medalhas = realloc(medalhas, (*tamanho) * sizeof(Medalha));
@@ -187,27 +196,36 @@ void inserir(Medalha medalhas[],int *tamanho){
     return;
 }
 
+// pesquisa as informações de acordo com as opcoes
 void pesquisar(Medalha *medalhas,int *tamanho){
+
+    // variaver pra verificar a cor que vai ser exibido
     char tipoG = 'G';
     char tipoS = 'S';
     char tipoB = 'B';
 
+    // pede e recebe a opção do usuario
     printf("Escolha o tipo de pesquisa\n1- por data\n2- por codigo\n3- por cidade\n");
     int escolha;
     scanf("%i",&escolha);
 
+    // switch com a execução  
     switch (escolha)
     {
-    case 1:
+    case 1:// por data
 
+        // pede e salva o ano de escolha do usuario
         printf("Digit o ano desejado:");
         int ano;
         scanf("%i",&ano);
+
+        // for responsavel por passar por todas as medalhas
         for (int i = 0; i < (*tamanho); i++)
         {
+            //if que verifica o ano
             if (ano == medalhas[i].ano)
             {
-                if (medalhas[i].tipo == tipoG)
+                if (medalhas[i].tipo == tipoG)// if que vericica o tipo da medalha
             {
                 // exibe as informacoes na cor ouro
                 printf(BGLD"%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
@@ -217,7 +235,7 @@ void pesquisar(Medalha *medalhas,int *tamanho){
             }// if ouro
             
             //if responsavel por verificas qual tipo de medalha é e exibir sua linha da cor prata 
-            if (medalhas[i].tipo == tipoS)
+            if (medalhas[i].tipo == tipoS)// if que vericica o tipo da medalha
             {
                 // exibe as informacoes na cor prata
                 printf(BSLV"%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
@@ -227,7 +245,7 @@ void pesquisar(Medalha *medalhas,int *tamanho){
             }// if prata
             
             //if responsavel por verificas qual tipo de medalha é e exibir sua linha da cor bronze
-            if (medalhas[i].tipo == tipoB)
+            if (medalhas[i].tipo == tipoB)// if que vericica o tipo da medalha
             {
                 // exibe as informacoes na cor bronze
                 printf(BBRZ"%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
@@ -244,7 +262,8 @@ void pesquisar(Medalha *medalhas,int *tamanho){
         }
         
         break;
-    case 2:
+
+    case 2:// por codigo
         printf("Digit o codigo desejado:");
         int codigo;
         scanf("%i",&codigo);
@@ -264,13 +283,14 @@ void pesquisar(Medalha *medalhas,int *tamanho){
 
 
         break;
-    case 3:
+
+    case 3:// ---------sera por pais
         /* code */
         break;
     
     default:
         break;
-    }
+    }// switch
     
     
 
@@ -280,27 +300,31 @@ void pesquisar(Medalha *medalhas,int *tamanho){
 
 
 
-}
+}// pesquisar
 
+//exibe uma lista com as opcoes do usuario
 void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
 
+    // cores das medalhas
     char tipoG = 'G';
     char tipoS = 'S';
     char tipoB = 'B';
 
-    inicio:
+    inicio:// executa um panda
 
+    // exibe o menu
     printf(BOLD "\n------MENU LISTAR-----\n\nLista de opções\n" RESET);
     printf("1 - Codigo\n");
     printf("2 - Tipo de medalha\n");
     printf("3 - Ano\n");
     printf("4 - Voltar\n");
-    printf("Digite sua opção: ");
+    printf("Digite sua opção: ");// pede a opção do usuario
     
-
+    // salva a opcao do usuario
     int escolha;
     scanf("%i",&escolha);
 
+    // em caso de a opção do usuario ser invalida repete o menu
     while (escolha > 4 || escolha < 1)
     {
         printf(BOLD "\n------MENU LISTAR-----\n\nLista de opções\n" RESET);
@@ -464,7 +488,6 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
     return;
 }// finção listar
 
-
 void excluir(Medalha medalhas[],int codigo,int *tamanho){
 
     //for responsavel por passar por todas as medalhas
@@ -487,6 +510,7 @@ void excluir(Medalha medalhas[],int codigo,int *tamanho){
     return;
 }//excluir
 
+//-------verificar e melhorar--------
 void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
     char opcao[10];
     printf(BOLD "\n------MENU INICIAL-----\n\nLista de opções\n" RESET);
@@ -519,7 +543,7 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
     }else if(strcasecmp(opcao, "7") == 0 || strcasecmp(opcao, "sair") == 0){
         printf("Ate a proxima!!\nFim do programa...\n");
 
-        salvaBinario(medalhas,arquivo,tamanho);
+        salvaBinario(medalhas,&tamanho);
 
         exit(1);
         
@@ -592,8 +616,8 @@ int main(){
     // fecha o arquivo
     fclose(arquivoBinario);
     // libera o espaço da struct Medalhas
-    }else// se o arquivo binario existir
-    {
+    }// se o arquivo binario existir
+
         
 
         // chama a função que verifica quantas linhas o arquivo possue 
@@ -624,7 +648,7 @@ int main(){
         fclose(arquivoTxtAnterior);
     
         free(medalhas);
-    }
+    
     
   
 
