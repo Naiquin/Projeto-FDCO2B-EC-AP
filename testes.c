@@ -54,7 +54,7 @@ void lerBinario(Medalha medalhas[],FILE* arquivo, int *tamanho){
 
 
 
-    fread(medalhas,sizeof(Medalha),(*tamanho),arquivo);
+   // fread(medalhas,sizeof(Medalha),(*tamanho),arquivo);
     
 
 
@@ -285,7 +285,15 @@ void pesquisar(Medalha *medalhas,int *tamanho){
         break;
 
     case 3:// ---------sera por pais
-        /* code */
+        printf("Digite o nome de uma cidade sede dos jogos:");
+        char cidade[31];
+        scanf("%30[^\n]",cidade);
+
+        for (int i = 0; i < (*tamanho); i++)
+        {
+            
+        }
+        
         break;
     
     default:
@@ -317,7 +325,9 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
     printf("1 - Codigo\n");
     printf("2 - Tipo de medalha\n");
     printf("3 - Ano\n");
-    printf("4 - Voltar\n");
+    printf("4 - listagem por ano\n");
+
+    printf("5 - Voltar\n");
     printf("Digite sua opção: ");// pede a opção do usuario
     
     // salva a opcao do usuario
@@ -351,6 +361,8 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
         for (int i = 0; i < (*tamanho); i++)
         {
             //if responsavel por verificas qual tipo de medalha é e exibir sua linha da cor ouro
+
+            char* COR = BSLV;
             if (medalhas[i].tipo == tipoG)
             {
                 // exibe as informacoes na cor ouro
@@ -475,8 +487,16 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
             goto inicio;
     }// if por ano
     
-    //opção de voltar para o menu inicial
+
     if (escolha == 4)
+    {
+        listagem(medalhas,tamanho);
+    }
+    
+
+
+    //opção de voltar para o menu inicial
+    if (escolha == 5)
     {
         menuInicial(medalhas, arquivo,tamanho);
         
@@ -509,6 +529,71 @@ void excluir(Medalha medalhas[],int codigo,int *tamanho){
     }//for
     return;
 }//excluir
+
+void listagem(Medalha* medalhas,int *tamanho){
+
+    printf("Digite o ano desejado:");
+    int ano;
+    scanf("%i",&ano);
+
+    typedef struct 
+    {
+        char pais[4];
+        int ouro;
+        int prata;
+        int bronze;
+        int total;
+    }Tabela;
+
+    Tabela *tabela = (Tabela *)malloc(sizeof(Tabela) * 100);
+
+    
+    
+    
+    
+
+    
+            
+                // for que passa por todas as linhas do arquivo
+                for (int i = 0; i < (*tamanho); i++)
+                {
+                    // if que exibe apenas se o ano for  o mesmo do mair para o menor
+                    if (medalhas[i].ano == ano)
+                    {
+                        printf("%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n",
+                                        medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
+                                        medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
+                                        medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
+                    }// if exibe
+
+                    
+                }// for todas as lihas
+                
+            
+                
+            
+        
+    
+
+// for (int i = 0; i < (100); i++)
+// {
+//     printf("Pais - %s| ouro - %i|prata - %i|bronze - %i|total - %i|\n",
+//                                         tabela[i].pais,tabela[i].ouro,tabela[i].prata,tabela[i].
+//                                         bronze,tabela[i].ouro+tabela[i].prata+tabela[i].bronze);
+    
+    
+// }
+
+
+
+
+free(tabela);
+
+}
+
+
+
+
 
 //-------verificar e melhorar--------
 void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
@@ -555,15 +640,15 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
 int main(){
     
     // abre o arquivo em binario salvo na execução anterior
-    FILE *arquivoTxtAnterior = fopen("medalhas.txt","rb");
+   // FILE *arquivoTxtAnterior = fopen("medalhas.txt","rb");
 
     // verifica se o arquivo binario existe
-    if (arquivoTxtAnterior == NULL)
-    {
+   // if (arquivoTxtAnterior == NULL)
+   // {
         // se o arquivo binario não existir...
 
         // abre o arquivoInicial "medalhas.csv" em leitura do modo texto 
-        FILE *arquivoInicial = fopen("medalhas.csv","r");
+        FILE *arquivoInicial = fopen("medalhas-v2.csv","r");
 
         // if responsavel por verificar erro ao abrir o arquivo
         if(arquivoInicial == NULL){
@@ -616,38 +701,38 @@ int main(){
     // fecha o arquivo
     fclose(arquivoBinario);
     // libera o espaço da struct Medalhas
-    }// se o arquivo binario existir
+    // }// se o arquivo binario existir
 
         
 
-        // chama a função que verifica quantas linhas o arquivo possue 
-        // e salva na variavel tamanho
-        int tamanho = verificarTamanhoArq(arquivoTxtAnterior);
+    //     // chama a função que verifica quantas linhas o arquivo possue 
+    //     // e salva na variavel tamanho
+    //     int tamanho = verificarTamanhoArq(arquivoTxtAnterior);
 
-        // inicializa a estrutura medalha e aloca dinamicamente o tamanho 
-        // de acordo com o numero de linha do arquivo
-        Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * tamanho);
+    //     // inicializa a estrutura medalha e aloca dinamicamente o tamanho 
+    //     // de acordo com o numero de linha do arquivo
+    //     Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * tamanho);
 
-        // verifica de ha erro na alocação dinamica da estrutura medalhas
-        if(medalhas == NULL){
-            perror("Erro ao alocar memoria dinamica ");
-            exit(1);
-        }
+    //     // verifica de ha erro na alocação dinamica da estrutura medalhas
+    //     if(medalhas == NULL){
+    //         perror("Erro ao alocar memoria dinamica ");
+    //         exit(1);
+    //     }
 
         
-        // exibe as boas vindas
-        printf(BOLD "-------Bem-vindo-------!\n\nRepositorio de medalhas \n  dos jogos olimpicos \n      desde 1896\n" RESET);
+    //     // exibe as boas vindas
+    //     printf(BOLD "-------Bem-vindo-------!\n\nRepositorio de medalhas \n  dos jogos olimpicos \n      desde 1896\n" RESET);
 
-        // chama a função que le o arquivo e passa para a struct.
-        lerBinario( medalhas, arquivoTxtAnterior, &tamanho);
+    //     // chama a função que le o arquivo e passa para a struct.
+    //     lerBinario( medalhas, arquivoTxtAnterior, &tamanho);
 
-        // chama a função que exibe o menu e verifica a opção do usuario.
-        menuInicial(medalhas,arquivoTxtAnterior, &tamanho);
+    //     // chama a função que exibe o menu e verifica a opção do usuario.
+    //     menuInicial(medalhas,arquivoTxtAnterior, &tamanho);
 
-        //fecha o arquivoTxtAnterior 
-        fclose(arquivoTxtAnterior);
+    //     //fecha o arquivoTxtAnterior 
+    //     fclose(arquivoTxtAnterior);
     
-        free(medalhas);
+    //     free(medalhas);
     
     
   
