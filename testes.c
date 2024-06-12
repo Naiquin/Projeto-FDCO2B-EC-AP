@@ -21,6 +21,9 @@ typedef struct{
     char resultado[11];
 } Medalha;
 
+/////////////////////////////////////////////// Funções de gerenciamento das medalhas///////////////////////////////////////////////////////////////////////////////
+
+
 // Função que lé as informacoes do arquivo
 void lerArquivo(Medalha medalhas[], FILE *arquivo, int tamanho) {
 
@@ -508,6 +511,33 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
     return;
 }// finção listar
 
+// alterar a lista de medalhas
+void alterarMedalha(Medalha *medalhas, int *tamanho,char codigo) {
+    for (int i = 0; i < tamanho; i++) {
+        if (medalhas[i].codigo == codigo) {
+            printf("Digite o novo gênero (M/F): ");
+            scanf(" %c", &medalhas[i].genero);
+            printf("Digite a nova modalidade: ");
+            scanf("%s", medalhas[i].modalidade);
+            printf("Digite a nova cidade: ");
+            scanf("%s", medalhas[i].cidade);
+            printf("Digite o novo ano: ");
+            scanf("%d", &medalhas[i].ano);
+            printf("Digite o novo tipo de medalha (G/B/S): ");
+            scanf(" %c", &medalhas[i].tipo);
+            printf("Digite o novo nome do atleta: ");
+            scanf("%s", medalhas[i].nome);
+            printf("Digite o novo país de origem: ");
+            scanf("%s", medalhas[i].pais);
+            printf("Digite o novo resultado: ");
+            scanf("%s", medalhas[i].resultado);
+            printf("Medalha alterada com sucesso.\n");
+            return;
+        }//if
+    }//for
+    printf("Medalha não encontrada.\n");
+}//alterarMedalha
+
 void excluir(Medalha medalhas[],int codigo,int *tamanho){
 
     //for responsavel por passar por todas as medalhas
@@ -611,10 +641,6 @@ free(tabela);
 
 }
 
-
-
-
-
 //-------verificar e melhorar--------
 void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
     char opcao[10];
@@ -632,6 +658,13 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
         pesquisar(medalhas,tamanho);
         
     }else if(strcasecmp(opcao, "4") == 0 || strcasecmp(opcao, "alterar") == 0){
+        int codigo;
+        printf("Digite o código da medalha a ser alterada: ");
+        scanf("%d",&codigo);
+
+        alterarMedalha( medalhas, tamanho, codigo);
+
+        exit(1);
         
     }else if(strcasecmp(opcao, "5") == 0 || strcasecmp(opcao, "excluir") == 0){
         
@@ -656,6 +689,8 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
 
     return;
 }// funcao menuInicial
+
+//////////////////////////////////////////////////////// main ///////////////////////////////////////////////////// 
 
 int main(){
     
