@@ -560,6 +560,26 @@ void listagem(Medalha* medalhas,int *tamanho){
                     // if que exibe apenas se o ano for  o mesmo do mair para o menor
                     if (medalhas[i].ano == ano)
                     {
+
+                        for (int j = 0; j < 100; j++)
+                        {
+
+                            if (tabela[j].pais == medalhas[i].pais)
+                            {
+                               
+
+                            }else if (tabela[i].pais == NULL)
+                            {
+                                *tabela[j].pais = medalhas[i].pais;
+                            }
+                            
+                            
+                           
+                        }
+                        
+                        
+
+
                         printf("%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n",
                                         medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
                                         medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
