@@ -513,8 +513,9 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
 
 // alterar a lista de medalhas
 void alterarMedalha(Medalha *medalhas, int *tamanho,char codigo) {
-    for (int i = 0; i < tamanho; i++) {
+    for (int i = 0; i < *tamanho; i++) {
         if (medalhas[i].codigo == codigo) {
+            printf("Medalha encontrada. Digite as novas informações.\n");
             printf("Digite o novo gênero (M/F): ");
             scanf(" %c", &medalhas[i].genero);
             printf("Digite a nova modalidade: ");
@@ -536,6 +537,7 @@ void alterarMedalha(Medalha *medalhas, int *tamanho,char codigo) {
         }//if
     }//for
     printf("Medalha não encontrada.\n");
+    return;
 }//alterarMedalha
 
 void excluir(Medalha medalhas[],int codigo,int *tamanho){
@@ -553,10 +555,12 @@ void excluir(Medalha medalhas[],int codigo,int *tamanho){
            {
             medalhas[j] = medalhas[j +1];
            }//for
-           
+           printf("Medalha excluida com sucesso.\n");
+           return;
         }//if
         
     }//for
+    printf("Medalha não encontrada.\n");
     return;
 }//excluir
 
@@ -662,11 +666,19 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
         printf("Digite o código da medalha a ser alterada: ");
         scanf("%d",&codigo);
 
-        alterarMedalha( medalhas, tamanho, codigo);
+        alterarMedalha( medalhas,tamanho,codigo);
 
         exit(1);
         
     }else if(strcasecmp(opcao, "5") == 0 || strcasecmp(opcao, "excluir") == 0){
+
+        int codigo;
+        printf("Digite o código da medalha a ser excluída: ");
+        scanf("%d",&codigo);
+
+        excluir( medalhas,codigo,tamanho);
+        exit(1);
+        
         
     }else if(strcasecmp(opcao, "6") == 0 || strcasecmp(opcao, "salvar") == 0){
         printf("Escreva o nome do arquivo que quer salvar(Apenas o nome)\n");
