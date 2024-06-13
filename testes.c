@@ -165,39 +165,40 @@ void lerString(char string[], int tamanho){
 
     return;
 }
+void inserir(Medalha**medalhas,int*tamanho){
+ (*tamanho)++;//realoca a memória para a nova medalha
+ *medalhas = realloc(*medalhas,(*tamanho)*sizeof(Medalha));
 
-// -------- verificar e melhorar----------
-void inserir(Medalha medalhas[],int *tamanho){
-    ((*tamanho)++);
-    medalhas = realloc(medalhas, (*tamanho) * sizeof(Medalha));
-    if(medalhas == NULL){
-        perror("Erro ao alocar memoria ");
-        exit(1);
-    }
+ if(*medalhas == NULL){
+    perror("Erro ao alocar memória!!");
+    exit(1);//verifica se há algum erro ao realocar
+ }
 
-    medalhas[(*tamanho)].codigo = (*tamanho);
-    
+    int indice = *tamanho-1; //indice da nova medalha
+
+    (*medalhas)[indice].codigo = indice;
     printf("Informe o genero do atleta: ");
-    scanf("%c", &medalhas[(*tamanho)].genero);
-    setbuf(stdin,NULL);
-    printf("Informe a modalidade que foi conquistada a medalha: ");
-    lerString( medalhas[(*tamanho)].modalidade, 50);
-    printf("Informe a cidade que foi conquistada a medalha: ");
-    lerString( medalhas[(*tamanho)].cidade, 50);
-    printf("Informe o ano que foi conquistada a medalha: ");
-    // scanf("%i", medalhas[(*tamanho)].ano);
-    // printf("Informe o tipo GBD da medalha: ");
-    // scanf("%c", medalhas[(*tamanho)].tipo);
-    // setbuf(stdin,NULL);
+    scanf("%c",&(*medalhas)[indice].genero);
+     setbuf(stdin,NULL);
+     printf("Informe a modalidade do atleta: ",medalhas);
+     lerString((*medalhas)[indice].modalidade, 50);
+     printf("Informe a cidade onde a medalha foi conquista: ",medalhas);
+     lerString((*medalhas)[indice].cidade, 50);
+     printf("Informe o ano onde a medalha foi conquistada: ",medalhas);
+     scanf("%d",&(*medalhas)[indice].ano);
+     // scanf("%i", medalhas[indice].ano);
+     //printf("Informe o tipo GBD da medalha: ",medalhas);
+    //lerString((*medalhas)[indice].tipo);
+    //setbuf(stdin,NULL);
     printf("Informe o nome do atleta: ");
-    lerString( medalhas[(*tamanho)].nome, 50);
-    printf("Informe o pais onde o atleta nasceu: ");
-    lerString( medalhas[(*tamanho)].pais, 50);
+    lerString((*medalhas)[indice].nome, 50);
+     printf("Informe o pais onde o atleta nasceu: ");
+     lerString((*medalhas)[indice].pais, 50);
     printf("Informe o resultado do atleta: ");
-    lerString( medalhas[(*tamanho)].resultado, 50);
+    lerString((*medalhas)[indice].resultado, 50);
     
     return;
-}
+ }
 
 // pesquisa as informações de acordo com as opcoes
 void pesquisar(Medalha *medalhas,int *tamanho){
