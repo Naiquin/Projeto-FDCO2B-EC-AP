@@ -25,7 +25,7 @@ typedef struct{
 
 
 // Função que lé as informacoes do arquivo
-void lerArquivo(Medalha medalhas[], FILE *arquivo, int tamanho) {
+void lerArquivo(Medalha medalhas[], FILE *arquivo, int tamanho) { 
 
     // for responsavel por passar por todas as linhas do codigo
     for(int i=0; i<tamanho; i++){
@@ -79,29 +79,24 @@ void lerBinario(Medalha medalhas[],FILE* arquivo, int *tamanho){
     
 }
 
-void salvaBinario(Medalha medalhas[],int *tamanho){
+void salvaBinario(Medalha *medalhas,int *tamanho){
 
-    FILE * arquivo=fopen("medalhas.txt","wb");
-
-    if (arquivo == NULL)
+    FILE *arquivoBinario = fopen("arquivoBinario.bin","wb");
+    if (arquivoBinario == NULL)
     {
-        printf("Erro ao salvar arquivo...\narquivo não salvo\n\n");
+        perror("Esso ao abrir o arquivo binario para salvamento.\n");
         exit(1);
+    }//if erro
+    printf("%d\n",tamanho);
+    fwrite(medalhas,sizeof(Medalha),tamanho,arquivoBinario);
+    fclose(arquivoBinario);
+    free(medalhas);//libera o espaço da struct Medalhas
 
-    }
+    return;
     
+}// salvaBinario
 
  
-            fwrite(&medalhas,sizeof(Medalha),tamanho,arquivo);
-        
-            printf("\n Arquivos salvos..\n");
-            fclose(arquivo);
-        
-
-return;
- 
-
-}// salva binario
 
 //salva as informações em formato csv com o nome dado pelo usuario
 void salvarCSV(Medalha medalhas[], char *nomeArquivo,int *tamanho){
@@ -165,6 +160,7 @@ void lerString(char string[], int tamanho){
 
     return;
 }
+
 void inserir(Medalha**medalhas,int*tamanho){
  (*tamanho)++;//realoca a memória para a nova medalha
  *medalhas = realloc(*medalhas,(*tamanho)*sizeof(Medalha));
@@ -339,7 +335,7 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
     scanf("%i",&escolha);
 
     // em caso de a opção do usuario ser invalida repete o menu
-    while (escolha > 4 || escolha < 1)
+    while (escolha > 5 || escolha < 1)
     {
         printf(BOLD "\n------MENU LISTAR-----\n\nLista de opções\n" RESET);
         printf("Digite o tipo de visualização\n");
@@ -366,35 +362,31 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
         {
             //if responsavel por verificas qual tipo de medalha é e exibir sua linha da cor ouro
 
-            char* COR = BSLV;
+            
             if (medalhas[i].tipo == tipoG)
             {
                 // exibe as informacoes na cor ouro
-                printf(BGLD"%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
-                                medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
-                                medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
-                                medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
+                printf(BGLD);
             }// if ouro
             
             //if responsavel por verificas qual tipo de medalha é e exibir sua linha da cor prata 
             if (medalhas[i].tipo == tipoS)
             {
                 // exibe as informacoes na cor prata
-                printf(BSLV"%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
-                                medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
-                                medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
-                                medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
+                printf(BSLV);
             }// if prata
             
             //if responsavel por verificas qual tipo de medalha é e exibir sua linha da cor bronze
             if (medalhas[i].tipo == tipoB)
             {
                 // exibe as informacoes na cor bronze
-                printf(BBRZ"%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
+                printf(BBRZ);
+            }//if bronze
+
+            printf("%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n"RESET,
                                 medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
                                 medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
                                 medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-            }//if bronze
             
         }//for todas as linhas
 
@@ -502,7 +494,7 @@ void listar(Medalha medalhas[],FILE* arquivo ,int *tamanho){
     //opção de voltar para o menu inicial
     if (escolha == 5)
     {
-        menuInicial(medalhas, arquivo,tamanho);
+        menuInicial(medalhas,arquivo,tamanho);
         
     }//if menu
 
@@ -567,27 +559,32 @@ void excluir(Medalha medalhas[],int codigo,int *tamanho){
 
 void listagem(Medalha* medalhas,int *tamanho){
 
-    printf("Digite o ano desejado:");
-    int ano;
-    scanf("%i",&ano);
-
+    //variaveis utilizadas
+    char tipoG = 'G';
+    char tipoS = 'S';
+    char tipoB = 'B';
+    int totalPaises = 0;
+    
+    // struct temporaria para salvar os resultados
     typedef struct 
     {
         char pais[4];
         int ouro;
         int prata;
         int bronze;
+        int pontos;
         int total;
     }Tabela;
 
+    // pede e recebe o ano desejado
+    printf("Digite o ano desejado:");
+    int ano;
+    scanf("%i",&ano);
+
+    // inicializa a estrutura Tabela
     Tabela *tabela = (Tabela *)malloc(sizeof(Tabela) * 100);
 
-    
-    
-    
-    
-
-    
+  
             
                 // for que passa por todas as linhas do arquivo
                 for (int i = 0; i < (*tamanho); i++)
@@ -595,56 +592,110 @@ void listagem(Medalha* medalhas,int *tamanho){
                     // if que exibe apenas se o ano for  o mesmo do mair para o menor
                     if (medalhas[i].ano == ano)
                     {
+                        
+                        int paisPresente = 0;// variavel para verificação se o espaco esta vazil
 
-                        for (int j = 0; j < 100; j++)
+                        for (int j = 0; j < totalPaises; j++)// for responsavel por passar por todos os paises
                         {
 
-                            if (tabela[j].pais == medalhas[i].pais)
-                            {
-                               
 
-                            }else if (tabela[i].pais == NULL)
+                            if (strcmp(tabela[j].pais,medalhas[i].pais)==0)// verifica se o pais esta na lista
                             {
-                                *tabela[j].pais = medalhas[i].pais;
-                            }
-                            
+                                paisPresente = 1;// variavel atestando que o pais esta na lista
+
+                                // ifs responsaveis pos acrecentar medalha
+                                if (medalhas[i].tipo == tipoG)
+                                {
+                                    tabela[totalPaises].ouro++;
+                                    tabela[totalPaises].total++;
+                                }
+                                if (medalhas[totalPaises].tipo == tipoS)
+                                {
+                                    tabela[totalPaises].prata++;
+                                    tabela[totalPaises].total++;
+                                }
+                                if (medalhas[i].tipo == tipoB)
+                                {
+                                    tabela[totalPaises].bronze++;
+                                    tabela[totalPaises].total++;
+                                }//if
+                                break;
+                            }//for
                             
                            
                         }
-                        
-                        
+                            if (!paisPresente)// se o espaço esta vazio
+                            {
+                                strcpy(tabela[totalPaises].pais,medalhas[i].pais);// salva o nome do paiz na lista
 
+                                // ifs responsaveis pos acrecentar medalha
+                                if (medalhas[i].tipo == tipoG)
+                                {
+                                    tabela[totalPaises].ouro++;
+                                    tabela[totalPaises].total++;
+                                    
+                                }
+                                if (medalhas[totalPaises].tipo == tipoS)
+                                {
+                                    tabela[totalPaises].prata++;
+                                    tabela[totalPaises].total++;
+                                    
+                                }
+                                if (medalhas[i].tipo == tipoB)
+                                {
+                                    tabela[totalPaises].bronze++;
+                                    tabela[totalPaises].total++;
+                                }//ifs
 
-                        printf("%6d|%6c|%-25s|%-21s|%5d|%-4c|%-30s|%-4s|%-9s\n",
-                                        medalhas[i].codigo,medalhas[i].genero, medalhas[i].modalidade,
-                                        medalhas[i].cidade, medalhas[i].ano, medalhas[i].tipo,
-                                        medalhas[i].nome, medalhas[i].pais, medalhas[i].resultado);
-                    }// if exibe
+                                totalPaises++;//acrecenta em paisesTotais
 
-                    
+                            }//if
+                    }// if exibe                    
                 }// for todas as lihas
+
                 
-            
                 
-            
-        
-    
 
-// for (int i = 0; i < (100); i++)
-// {
-//     printf("Pais - %s| ouro - %i|prata - %i|bronze - %i|total - %i|\n",
-//                                         tabela[i].pais,tabela[i].ouro,tabela[i].prata,tabela[i].
-//                                         bronze,tabela[i].ouro+tabela[i].prata+tabela[i].bronze);
-    
-    
-// }
+                for (int i = 0; i < totalPaises; i++)// for q passa por todos os paises
+                {
+                    for (int j = 0; j < totalPaises; j++)//for que verifica individual
+                    {
+                        // if que compara os totais e salva o maior na freente
+                        if (tabela[j].total < tabela[j+1].total)
+                        {
+                            Tabela temp = tabela[j];
+                            tabela[j] = tabela[j+1];
+                            tabela[j+1] = temp;
+                        } // if                 
+                    }//for interno
+                }// for externo
+                
+                // exibe cabeçalho
+                printf("Pais|Ouro|prata|bronze|total|Pontos\n");
 
+                for (int i = 0; i < totalPaises; i++)// for que exibe resultado
+                {
+                    
+                    // resultados com cores
 
-
-
+                    printf(BOLD);
+                    printf("%-4s|"RESET,tabela[i].pais);
+                    printf(BGLD);
+                    printf("%-4i"RESET,tabela[i].ouro);
+                    printf(BSLV);
+                    printf("|%-5i"RESET,tabela[i].prata);
+                    printf(BBRZ);
+                    printf("|%-6i"RESET,tabela[i].bronze);
+                    printf(BOLD);
+                    printf("|%-5i\n"RESET,tabela[i].total);
+                    
+                    
+                    
+                }//for
+                
 free(tabela);
 
-}
+}// listagem
 
 //-------verificar e melhorar--------
 void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
@@ -694,7 +745,7 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
     }else if(strcasecmp(opcao, "7") == 0 || strcasecmp(opcao, "sair") == 0){
         printf("Ate a proxima!!\nFim do programa...\n");
 
-        salvaBinario(medalhas,&tamanho);
+        salvaBinario(medalhas,*tamanho);
 
         exit(1);
         
@@ -708,11 +759,11 @@ void menuInicial(Medalha medalhas[],FILE *arquivo, int *tamanho){
 int main(){
     
     // abre o arquivo em binario salvo na execução anterior
-   // FILE *arquivoTxtAnterior = fopen("medalhas.txt","rb");
+    FILE *arquivoBinario = fopen("arquivoBinario.bin","rb");
 
     // verifica se o arquivo binario existe
-   // if (arquivoTxtAnterior == NULL)
-   // {
+    if (arquivoBinario == NULL)
+    {
         // se o arquivo binario não existir...
 
         // abre o arquivoInicial "medalhas.csv" em leitura do modo texto 
@@ -727,13 +778,6 @@ int main(){
         // chama a função que verifica quantas linhas o arquivo possue 
         // e salva na variavel tamanho
         int tamanho = verificarTamanhoArq(arquivoInicial);
-
-        // if responsavel por verificar erro ao abrir o arquivo
-        if(arquivoInicial == NULL){
-            perror("Erro ao abrir o arquivo ");
-            exit(1);        
-        }//if
-
 
         // inicializa a estrutura medalha e aloca dinamicamente o tamanho 
         // de acordo com o numero de linha do arquivo
@@ -752,61 +796,53 @@ int main(){
         lerArquivo( medalhas, arquivoInicial, tamanho);
 
         // chama a função que exibe o menu e verifica a opção do usuario.
-        // abre o arquivoBinario "medalhas.txt" em escrita no modo texto
-        FILE *arquivoBinario = fopen("medalhas.txt","wb");
-
-        // verifica se ha erro ao abrir/criar o arquivo 
-        if(arquivoBinario == NULL){
-            perror("Erro ao abrir o arquivo ");
-            exit(1);
-        }
-        menuInicial(medalhas,arquivoBinario, &tamanho);
+        
+        menuInicial(medalhas,arquivoInicial, &tamanho);
 
         //fecha o arquivoInicial 
         fclose(arquivoInicial);
 
+    
+    }// se o arquivo binario existir
 
-    // fecha o arquivo
+    fseek(arquivoBinario,0,SEEK_END);
+    long tamanhoArquivo = ftell(arquivoBinario);
+    rewind(arquivoBinario);
+
+    printf("&d\n",tamanhoArquivo);
+
+    int tamanho = tamanhoArquivo/sizeof(Medalha);
+    printf("&d\n",tamanho);
+
+        Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * tamanho);
+
+        // verifica de ha erro na alocação dinamica da estrutura medalhas
+        if(medalhas == NULL){
+            perror("Erro ao alocar memoria dinamica ");
+            exit(1);
+        }
+    medalhas = (Medalha*)malloc(tamanho* sizeof(Medalha));
+    if (medalhas == NULL)
+    {
+       perror("Erro ao alocar memoria\n");
+       exit(1);
+    }//if erro
+
+    fread(medalhas,sizeof(Medalha),tamanho,arquivoBinario);
+
     fclose(arquivoBinario);
-    // libera o espaço da struct Medalhas
-    // }// se o arquivo binario existir
+       
+        // exibe as boas vindas
+        printf(BOLD "-------Bem-vindo-------!\n\nRepositorio de medalhas \n  dos jogos olimpicos \n      desde 1896\n" RESET);
 
+        // chama a função que le o arquivo e passa para a struct.
         
 
-    //     // chama a função que verifica quantas linhas o arquivo possue 
-    //     // e salva na variavel tamanho
-    //     int tamanho = verificarTamanhoArq(arquivoTxtAnterior);
+        // chama a função que exibe o menu e verifica a opção do usuario.
+        menuInicial(medalhas,arquivoBinario, &tamanho);
 
-    //     // inicializa a estrutura medalha e aloca dinamicamente o tamanho 
-    //     // de acordo com o numero de linha do arquivo
-    //     Medalha *medalhas = (Medalha *)malloc(sizeof(Medalha) * tamanho);
-
-    //     // verifica de ha erro na alocação dinamica da estrutura medalhas
-    //     if(medalhas == NULL){
-    //         perror("Erro ao alocar memoria dinamica ");
-    //         exit(1);
-    //     }
-
-        
-    //     // exibe as boas vindas
-    //     printf(BOLD "-------Bem-vindo-------!\n\nRepositorio de medalhas \n  dos jogos olimpicos \n      desde 1896\n" RESET);
-
-    //     // chama a função que le o arquivo e passa para a struct.
-    //     lerBinario( medalhas, arquivoTxtAnterior, &tamanho);
-
-    //     // chama a função que exibe o menu e verifica a opção do usuario.
-    //     menuInicial(medalhas,arquivoTxtAnterior, &tamanho);
-
-    //     //fecha o arquivoTxtAnterior 
-    //     fclose(arquivoTxtAnterior);
-    
-    //     free(medalhas);
-    
-    
-  
-
-
-
+        //fecha o arquivoTxtAnterior 
+        fclose(arquivoBinario);   
 
     return 0;
 }// main

@@ -5,16 +5,6 @@ Deverá permitir cadastrar
 (inserir/listar ok/pesquisar/alterar/excluir ok) as medalhas obtidas por cada atleta. Essa relação
 deve aumentar e diminuir dinamicamente;
 
-◦ Deverá gerar e exibir as tabelas ordenadas de totais medalhas por edição dos jogos
-olímpicos (País, Ouro, Prata, Bronze), navegando entre elas. Para isso utilize cores,
-sons e sua criatividade;// falta por pais
-
-
-
-◦ Ao sair do programa, todos os dados sobre as medalhas devem ser salvos em arquivos
-binários no HD. O mesmo arquivo binário deverá ser recarregado novamente ao iniciar o
-programa nas próximas vezes;
-
 
 ◦ Os códigos referentes a cada estrutura devem estar em um arquivo fonte (.c) separado
 com seu respectivo arquivo de cabeçalho(.h). Utilize outros arquivos para organizar seu
@@ -29,16 +19,23 @@ globais. O código deverá estar comentado, edentado e com bons nomes de variáv
 funções. Siga o padrão de documentação apresentado na disciplina (Doxygen).
 
 
+
+
+
+
+
 Defina uma estrutura Medalha contendo: Código (contador inteiro), Gênero (char),
 Modalidade(string), Cidade(string), Ano(int), Tipo Medalha GBS(char), Nome
 Atleta(string), Pais Origem (string), Resultado (?). ok
 
 
+◦ Deverá gerar e exibir as tabelas ordenadas de totais medalhas por edição dos jogos
+olímpicos (País, Ouro, Prata, Bronze), navegando entre elas. Para isso utilize cores,
+sons e sua criatividade;// ok
 
-
-
-
-
+◦ Ao sair do programa, todos os dados sobre as medalhas devem ser salvos em arquivos
+binários no HD. O mesmo arquivo binário deverá ser recarregado novamente ao iniciar o
+programa nas próximas vezes;ok
 
 ◦ Deverá apresentar um menu inicial com as opções disponíveis. Caso necessário,
 submenus. A interface deverá ser fácil e intuitiva, seja criativo, utilize cores e beeps :) .
